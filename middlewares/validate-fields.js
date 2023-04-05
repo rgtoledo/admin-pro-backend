@@ -13,6 +13,6 @@ const validateField = (req, resp = response, next) => {
   next();
 };
 
-module.exports = {
+module.exports = { 
   validateField,
 };

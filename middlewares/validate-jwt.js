@@ -7,7 +7,7 @@ const validateJWT = (req, resp = response, next) => {
   if (!token)
     return resp.status(400).json({
       ok: false,
-      msg: "token not provided",
+      msg: "token not provided or invalid",
     });
   try {
     const { uid } = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -16,7 +16,7 @@ const validateJWT = (req, resp = response, next) => {
   } catch (error) {
     return resp.status(400).json({
       ok: false,
-      msg: "token not provided",
+      msg: "token not provided or invalid",
     });
   }
 };

@@ -7,10 +7,21 @@ const { generateJWT } = require("../helpers/jwt");
  *=============================================**/
 const getUsers = async (req, resp = response) => {
   try {
-    const users = await User.find({}, "name email role google");
+    const from = Number(req.query.from) || 0;
+    let limit = Number(req.query.limit) || 999999999999999;
+
+    const [users, total] = await Promise.all([
+      User.find({}, "name email role google img").skip(from).limit(limit),
+      User.count(),
+    ]);
+    if (limit === 999999999999999) limit = total;
+    let to = from + limit;
+    if (to > total) to = total;
+
     resp.status(200).json({
       ok: true,
       users,
+      showing: `from ${from + 1} to ${to} of ${total}`,
       uid: req.uid,
     });
   } catch (error) {

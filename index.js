@@ -35,7 +35,11 @@ app.listen(process.env.PORT, () => {
  *                           routes
  *========================================================================**/
 app.use("/api/users", require("./routes/user.route"));
+app.use("/api/hospital", require("./routes/hospital.route"));
+app.use("/api/doctor", require("./routes/doctor.route"));
 app.use("/api/auth", require("./routes/auth.route"));
+app.use("/api/all", require("./routes/all.route"));
+app.use("/api/upload", require("./routes/upload.route"));
 /*============================ END OF routes ============================*/
 
 /*============================ END OF express server ============================*/
