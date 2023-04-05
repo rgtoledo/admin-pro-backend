@@ -22,6 +22,11 @@ app.use(cors());
 /*==== END OF cors ====*/
 
 /**======================
+ *    public folder
+ *========================**/
+app.use(express.static("public"));
+
+/**======================
  *    reading and parsing body
  *========================**/
 app.use(express.json());
