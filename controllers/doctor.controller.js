@@ -28,9 +28,23 @@ const getDoctors = async (req, resp = response) => {
  *               delete docdoctorto
  *=============================================**/
 const deleteDoctor = async (req, resp = response) => {
+  const id = req.params.id;
+
   try {
+    const doctorDB = await Doctor.findById(id);
+
+    if (!doctorDB) {
+      return resp.status(404).json({
+        ok: false,
+        msg: "not doctor found",
+      });
+    }
+
+    await Doctor.findByIdAndDelete(id);
     resp.status(200).json({
-      ok: false,
+      ok: true,
+      id,
+      msg: "Doctor deleted",
     });
   } catch (error) {
     console.log(error);
@@ -45,10 +59,55 @@ const deleteDoctor = async (req, resp = response) => {
 /**============================================
  *              update doctor
  *=============================================**/
+
 const updateDoctor = async (req, resp = response) => {
+  const id = req.params.id;
+  const uid = req.uid;
+  const hid = req.body.hospital;
+  let [doctorDB, hospitalDB] = [];
+
   try {
+    if (hid) {
+      if (hid.length !== 24)
+        return resp.status(404).json({
+          ok: false,
+          msg: "invalid hospital id",
+        });
+
+      [doctorDB, hospitalDB] = await Promise.all([
+        Doctor.findById(id),
+        Hospital.findById(hid),
+      ]);
+
+      if (!hospitalDB) {
+        return resp.status(404).json({
+          ok: false,
+          msg: "not hospital found",
+        });
+      }
+    } else {
+      doctorDB = await Doctor.findById(id);
+    }
+
+    if (!doctorDB) {
+      return resp.status(404).json({
+        ok: false,
+        msg: "not doctor found",
+      });
+    }
+
+    const changesDoctor = {
+      ...req.body,
+      user: uid,
+    };
+
+    const updatedDoctor = await Doctor.findByIdAndUpdate(id, changesDoctor, {
+      new: true,
+    });
+
     resp.status(200).json({
       ok: true,
+      updatedDoctor,
     });
   } catch (error) {
     console.log(error);

@@ -46,7 +46,7 @@ const login = async (req, resp = response) => {
 /*=============== END OF login ==============*/
 
 /**============================================
- *                login
+ *                login with google
  *=============================================**/
 const loginGoogle = async (req, resp = response) => {
   const { googletoken } = req.body;
@@ -88,8 +88,28 @@ const loginGoogle = async (req, resp = response) => {
     });
   }
 };
+/*=============== END OF login with google ==============*/
+
+/**============================================
+ *               renew Token
+ *=============================================**/
+
+const renewToken = async (req, resp = response) => {
+  const uid = req.uid;
+  /**======================
+   *    generate JWT
+   *========================**/
+  const token = await generateJWT(uid);
+
+  resp.status(200).json({
+    ok: true,
+    uid,
+    token,
+  });
+};
 
 module.exports = {
   login,
   loginGoogle,
+  renewToken,
 };

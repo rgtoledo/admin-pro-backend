@@ -21,12 +21,6 @@ const router = Router();
 router.get("/", validateJWT, getHospitals);
 /*==== END OF get hospitals ====*/
 /**======================
- *    delete hospital
- *========================**/
-router.delete("/:id", validateJWT, deleteHospital);
-/*==== END OF delete hospital ====*/
-
-/**======================
  *    post hospital
  *========================**/
 router.post(
@@ -44,6 +38,11 @@ router.post(
  *    put hospital
  *========================**/
 router.put("/:id", [validateJWT], updateHospital);
+/*==== END OF put hospital ====*/
+/**======================
+ *    put hospital
+ *========================**/
+router.delete("/:id", [validateJWT], deleteHospital);
 /*==== END OF put hospital ====*/
 
 module.exports = router;
